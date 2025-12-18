@@ -37,13 +37,17 @@ tenantsRouter.get("/", async (req, res, next) => {
   try {
     const { propertyId } = req.query;
 
-    let query = db.select().from(tenants);
-
+    let allTenants;
     if (propertyId) {
-      query = query.where(eq(tenants.propertyId, parseInt(propertyId as string)));
+      allTenants = await db
+        .select()
+        .from(tenants)
+        .where(eq(tenants.propertyId, parseInt(propertyId as string)))
+        .orderBy(tenants.name);
+    } else {
+      allTenants = await db.select().from(tenants).orderBy(tenants.name);
     }
 
-    const allTenants = await query.orderBy(tenants.name);
     res.json(allTenants);
   } catch (error) {
     next(error);

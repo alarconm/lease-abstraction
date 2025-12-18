@@ -115,7 +115,7 @@ export const rentSchedules = pgTable("rent_schedules", {
   notes: text("notes"),
   citation: jsonb("citation"), // { document, section, page }
   isSuperseded: boolean("is_superseded").default(false),
-  supersededBy: integer("superseded_by").references(() => rentSchedules.id),
+  supersededBy: integer("superseded_by"), // Reference to another rent schedule that supersedes this one
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
